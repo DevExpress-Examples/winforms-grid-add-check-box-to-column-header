@@ -1,3 +1,11 @@
+<!-- default file list -->
+*Files to look at*:
+
+* [ColumnCheckedChangedEventArgs.cs](./CS/ColumnCheckedChangedEventArgs.cs) (VB: [ColumnCheckedChangedEventArgs.vb](./VB/ColumnCheckedChangedEventArgs.vb))
+* [ColumnStateRepository.cs](./CS/ColumnStateRepository.cs) (VB: [ColumnStateRepository.vb](./VB/ColumnStateRepository.vb))
+* **[GridViewColumnHeaderExtender.cs](./CS/GridViewColumnHeaderExtender.cs) (VB: [GridViewColumnHeaderExtender.vb](./VB/GridViewColumnHeaderExtender.vb))**
+* [Main.cs](./CS/Main.cs) (VB: [Main.vb](./VB/Main.vb))
+<!-- default file list end -->
 # GridControl - How to add a check box to a column header
 
 
