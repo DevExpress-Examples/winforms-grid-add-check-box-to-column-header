@@ -35,7 +35,7 @@ namespace DXSample {
             // defaultLookAndFeel1
             // 
             this.defaultLookAndFeel1.EnableBonusSkins = true;
-            this.defaultLookAndFeel1.LookAndFeel.SkinName = "Office 2013";
+            this.defaultLookAndFeel1.LookAndFeel.SkinName = "The Bezier";
             // 
             // gridControl1
             // 
@@ -45,7 +45,7 @@ namespace DXSample {
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(574, 354);
+            this.gridControl1.Size = new System.Drawing.Size(590, 363);
             this.gridControl1.TabIndex = 0;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -66,7 +66,7 @@ namespace DXSample {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(614, 394);
+            this.ClientSize = new System.Drawing.Size(630, 403);
             this.Controls.Add(this.gridControl1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Main";
