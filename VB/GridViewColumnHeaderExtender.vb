@@ -1,9 +1,5 @@
-﻿Imports System
-Imports System.Collections.Generic
-Imports System.Windows.Forms
-Imports DevExpress.Skins
+﻿Imports DevExpress.Skins
 Imports DevExpress.XtraGrid.Views.Grid
-Imports System.Drawing
 Imports DevExpress.XtraGrid.Views.Grid.ViewInfo
 Imports DevExpress.XtraGrid.Drawing
 Imports DevExpress.Utils.Drawing
@@ -12,16 +8,15 @@ Imports DevExpress.Utils
 Imports System.ComponentModel
 
 Namespace DXSample
-	Public Class GridViewColumnHeaderExtender
-		Inherits Component
+    Public Class GridViewColumnHeaderExtender
+        Inherits Component
 
-
-        Private _view As GridView = Nothing
+        Private view_Renamed As GridView = Nothing
         Private ReadOnly checkBoxSize As Size
         Public Property DrawCheckBoxByDefault() As Boolean
         Private inHeader As Boolean = False
-        Private isCheckBoxCollectionInitialized As Boolean = False
         Private checkBoxCollection As ImageCollection = Nothing
+        Private glyphCollection As ImageCollection = Nothing
         Private column As GridColumn = Nothing
 
         Public Sub New()
@@ -31,14 +26,14 @@ Namespace DXSample
 
         Public Property View() As GridView
             Get
-                Return _view
+                Return view_Renamed
             End Get
             Set(ByVal value As GridView)
-                If _view Is value Then
+                If view_Renamed Is value Then
                     Return
                 End If
                 OnViewChanging()
-                _view = value
+                view_Renamed = value
                 OnViewChanged()
             End Set
         End Property
@@ -83,9 +78,9 @@ Namespace DXSample
         End Sub
 
         Private Sub view_MouseLeave(ByVal sender As Object, ByVal e As EventArgs)
-            If Not DrawCheckBoxByDefault AndAlso column IsNot Nothing Then
+            If (Not DrawCheckBoxByDefault) AndAlso column IsNot Nothing Then
                 inHeader = False
-                _view.InvalidateColumnHeader(column)
+                view_Renamed.InvalidateColumnHeader(column)
             End If
         End Sub
 
@@ -99,11 +94,11 @@ Namespace DXSample
         Private Sub SetCheckBoxState(ByVal column As GridColumn, ByVal state As ObjectState)
             CheckColumnTag(column)
             TryCast(column.Tag, ColumnStateRepository).State = state
-            _view.InvalidateColumnHeader(column)
+            view_Renamed.InvalidateColumnHeader(column)
         End Sub
 
         Private Function ColumnHeaderContainsCursor(ByVal pt As Point) As Boolean
-            Dim hitInfo As GridHitInfo = _view.CalcHitInfo(pt)
+            Dim hitInfo As GridHitInfo = view_Renamed.CalcHitInfo(pt)
             column = hitInfo.Column
             inHeader = hitInfo.HitTest = GridHitTest.Column
             Return inHeader
@@ -116,7 +111,7 @@ Namespace DXSample
 
         Private Function CalcCheckBoxRectangle(ByVal col As GridColumn) As Rectangle
             GraphicsInfo.Default.AddGraphics(Nothing)
-            Dim viewInfo As GridViewInfo = TryCast(_view.GetViewInfo(), GridViewInfo)
+            Dim viewInfo As GridViewInfo = TryCast(view_Renamed.GetViewInfo(), GridViewInfo)
             Dim columnArgs As GridColumnInfoArgs = viewInfo.ColumnsInfo(col)
             Dim rect As Rectangle
             Try
@@ -137,7 +132,7 @@ Namespace DXSample
 
         Private Function CalcInnerElementsMinWidth(ByVal columnArgs As GridColumnInfoArgs, ByVal gr As Graphics) As Integer
             Dim canDrawMode As Boolean = True
-            Return columnArgs.InnerElements.CalcMinSize(gr, canDrawMode).Width
+            Return columnArgs.InnerElements.CalcMinSize(gr, canDrawMode).Width + 5
         End Function
 
         Private Sub OnCustomDrawColumnHeader(ByVal sender As Object, ByVal e As ColumnHeaderCustomDrawEventArgs)
@@ -157,10 +152,7 @@ Namespace DXSample
             If col.Tag IsNot Nothing AndAlso col.Tag.GetType() Is GetType(ColumnStateRepository) Then
                 Return
             End If
-            col.Tag = New ColumnStateRepository With {
-                .State = ObjectState.Normal,
-                .Checked = False
-            }
+            col.Tag = New ColumnStateRepository With {.State = ObjectState.Normal, .Checked = False}
         End Sub
 
         Private Function CanDrawCheckBox(ByVal col As GridColumn) As Boolean
@@ -181,49 +173,76 @@ Namespace DXSample
                     index = offset + 2
             End Select
             Dim rect As Rectangle = CalcCheckBoxRectangle(e.Column)
-            CheckCheckBoxCollection()
+            CheckImageCollections()
+            CheckGlyphCollection()
             e.Cache.DrawImage(checkBoxCollection.Images(index), rect)
+            If Not skipGlyph Then
+                e.Cache.DrawImage(glyphCollection.Images(index), rect)
+            End If
         End Sub
 
-        Private Sub CheckCheckBoxCollection()
-            If isCheckBoxCollectionInitialized Then
-                Return
+        Private Sub CheckImageCollections()
+            If checkBoxCollection Is Nothing Then
+                checkBoxCollection = GetCheckBoxImages()
             End If
-            checkBoxCollection = GetCheckBoxImages()
-            isCheckBoxCollectionInitialized = True
+        End Sub
+
+        Private Sub CheckGlyphCollection()
+            If (Not skipGlyph) AndAlso glyphCollection Is Nothing Then
+                glyphCollection = GetGlyphImages()
+            End If
+
         End Sub
 
         Protected Overridable Function GetCheckBoxImages() As ImageCollection
-            Dim skin As Skin = EditorsSkins.GetSkin(DevExpress.LookAndFeel.UserLookAndFeel.Default)
-            Dim skinElement As SkinElement = skin("CheckBox")
+            Dim skinElement As SkinElement = GetSkinElement()
             If skinElement Is Nothing Then
                 Return Nothing
             End If
+
             Return skinElement.Image.GetImages()
         End Function
 
+        Private skipGlyph As Boolean = False
+        Protected Overridable Function GetGlyphImages() As ImageCollection
+            Dim skinElement As SkinElement = GetSkinElement()
+            If skinElement Is Nothing Then
+                Return Nothing
+            End If
+            If skinElement.Glyph Is Nothing Then
+                skipGlyph = True
+                Return Nothing
+            End If
+            Return skinElement.Glyph.GetImages()
+        End Function
+
+        Private Shared Function GetSkinElement() As SkinElement
+            Dim skin As Skin = EditorsSkins.GetSkin(DevExpress.LookAndFeel.UserLookAndFeel.Default)
+            Dim skinElement As SkinElement = skin("CheckBox")
+            Return skinElement
+        End Function
         Private Sub DefaultDrawColumnHeader(ByVal e As ColumnHeaderCustomDrawEventArgs)
             e.Painter.DrawObject(e.Info)
         End Sub
 
         Private Sub ViewEvents(ByVal subscribe As Boolean)
-            If _view Is Nothing Then
+            If view_Renamed Is Nothing Then
                 Return
             End If
             If Not subscribe Then
-                RemoveHandler _view.CustomDrawColumnHeader, AddressOf OnCustomDrawColumnHeader
-                RemoveHandler _view.MouseDown, AddressOf OnMouseDown
-                RemoveHandler _view.MouseUp, AddressOf OnMouseUp
-                RemoveHandler _view.MouseMove, AddressOf OnMouseMove
-                RemoveHandler _view.MouseLeave, AddressOf view_MouseLeave
+                RemoveHandler view_Renamed.CustomDrawColumnHeader, AddressOf OnCustomDrawColumnHeader
+                RemoveHandler view_Renamed.MouseDown, AddressOf OnMouseDown
+                RemoveHandler view_Renamed.MouseUp, AddressOf OnMouseUp
+                RemoveHandler view_Renamed.MouseMove, AddressOf OnMouseMove
+                RemoveHandler view_Renamed.MouseLeave, AddressOf view_MouseLeave
                 Return
             End If
 
-            AddHandler _view.CustomDrawColumnHeader, AddressOf OnCustomDrawColumnHeader
-            AddHandler _view.MouseDown, AddressOf OnMouseDown
-            AddHandler _view.MouseUp, AddressOf OnMouseUp
-            AddHandler _view.MouseMove, AddressOf OnMouseMove
-            AddHandler _view.MouseLeave, AddressOf view_MouseLeave
+            AddHandler view_Renamed.CustomDrawColumnHeader, AddressOf OnCustomDrawColumnHeader
+            AddHandler view_Renamed.MouseDown, AddressOf OnMouseDown
+            AddHandler view_Renamed.MouseUp, AddressOf OnMouseUp
+            AddHandler view_Renamed.MouseMove, AddressOf OnMouseMove
+            AddHandler view_Renamed.MouseLeave, AddressOf view_MouseLeave
         End Sub
 
         Protected Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -235,9 +254,9 @@ Namespace DXSample
         Public Overridable Sub RaiseColumnCheckedChanged(ByVal ea As ColumnCheckedChangedEventArgs)
             Dim handler As EventHandler(Of ColumnCheckedChangedEventArgs) = ColumnCheckedChangedEvent
             If handler IsNot Nothing Then
-                handler(_view, ea)
+                handler(view_Renamed, ea)
             End If
-		End Sub
+        End Sub
 
-	End Class
+    End Class
 End Namespace
