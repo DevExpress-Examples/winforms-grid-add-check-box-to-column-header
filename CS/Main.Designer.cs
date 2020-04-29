@@ -23,19 +23,12 @@ namespace DXSample {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.components = new System.ComponentModel.Container();
-            this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridViewColumnHeaderExtender1 = new DXSample.GridViewColumnHeaderExtender();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // defaultLookAndFeel1
-            // 
-            this.defaultLookAndFeel1.EnableBonusSkins = true;
-            this.defaultLookAndFeel1.LookAndFeel.SkinName = "The Bezier";
             // 
             // gridControl1
             // 
@@ -45,7 +38,7 @@ namespace DXSample {
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(590, 363);
+            this.gridControl1.Size = new System.Drawing.Size(588, 361);
             this.gridControl1.TabIndex = 0;
             this.gridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -66,7 +59,7 @@ namespace DXSample {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(630, 403);
+            this.ClientSize = new System.Drawing.Size(628, 401);
             this.Controls.Add(this.gridControl1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Main";
@@ -80,8 +73,6 @@ namespace DXSample {
 
         #endregion
 
-
-        private DevExpress.LookAndFeel.DefaultLookAndFeel defaultLookAndFeel1;
         private DevExpress.XtraGrid.GridControl gridControl1;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
         private GridViewColumnHeaderExtender gridViewColumnHeaderExtender1;

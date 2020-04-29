@@ -126,7 +126,7 @@ namespace DXSample {
 
         private int CalcInnerElementsMinWidth(GridColumnInfoArgs columnArgs, Graphics gr) {
             bool canDrawMode = true;
-            return columnArgs.InnerElements.CalcMinSize(gr, ref canDrawMode).Width+5;
+            return columnArgs.InnerElements.CalcMinSize(gr, ref canDrawMode).Width + 5;
         }
 
         void OnCustomDrawColumnHeader(object sender, ColumnHeaderCustomDrawEventArgs e) {
@@ -241,6 +241,5 @@ namespace DXSample {
             if (handler != null)
                 handler(view, ea);
         }
-
     }
 }
