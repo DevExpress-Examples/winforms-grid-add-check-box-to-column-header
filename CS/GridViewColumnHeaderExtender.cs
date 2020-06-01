@@ -238,7 +238,10 @@ namespace DXSample
 
         protected override void Dispose(bool disposing)
         {
-            ViewEvents(false);
+            if(disposing) {
+                ViewEvents(false);
+                View = null;
+            }
             base.Dispose(disposing);
         }
 

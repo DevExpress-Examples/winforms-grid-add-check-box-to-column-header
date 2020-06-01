@@ -227,7 +227,11 @@ Namespace DXSample
         End Sub
 
         Protected Overrides Sub Dispose(ByVal disposing As Boolean)
-            ViewEvents(False)
+            If disposing Then
+                ViewEvents(False)
+                View = Nothing
+            End If
+
             MyBase.Dispose(disposing)
         End Sub
 
