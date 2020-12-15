@@ -18,9 +18,12 @@ Namespace DXSample
 
         Private _view As GridView = Nothing
         Private ReadOnly checkBoxSize As Size
+
+        Private skipGlyph As Boolean = False
         Public Property DrawCheckBoxByDefault() As Boolean
         Private inHeader As Boolean = False
         Private isCheckBoxCollectionInitialized As Boolean = False
+        Private glyphCollection As ImageCollection = Nothing
         Private checkBoxCollection As ImageCollection = Nothing
         Private column As GridColumn = Nothing
 
@@ -181,25 +184,42 @@ Namespace DXSample
                     index = offset + 2
             End Select
             Dim rect As Rectangle = CalcCheckBoxRectangle(e.Column)
-            CheckCheckBoxCollection()
+            CheckImageCollections()
+            CheckGlyphCollection()
             e.Cache.DrawImage(checkBoxCollection.Images(index), rect)
+            If Not skipGlyph Then e.Cache.DrawImage(glyphCollection.Images(index), rect)
         End Sub
 
-        Private Sub CheckCheckBoxCollection()
-            If isCheckBoxCollectionInitialized Then
-                Return
-            End If
-            checkBoxCollection = GetCheckBoxImages()
-            isCheckBoxCollectionInitialized = True
+        Private Sub CheckImageCollections()
+            If checkBoxCollection Is Nothing Then checkBoxCollection = GetCheckBoxImages()
+        End Sub
+
+        Private Sub CheckGlyphCollection()
+            If Not skipGlyph AndAlso glyphCollection Is Nothing Then glyphCollection = GetGlyphImages()
         End Sub
 
         Protected Overridable Function GetCheckBoxImages() As ImageCollection
-            Dim skin As Skin = EditorsSkins.GetSkin(DevExpress.LookAndFeel.UserLookAndFeel.Default)
-            Dim skinElement As SkinElement = skin("CheckBox")
-            If skinElement Is Nothing Then
+            Dim skinElement As SkinElement = GetSkinElement()
+            If skinElement Is Nothing Then Return Nothing
+            Return skinElement.Image.GetImages()
+        End Function
+
+        Protected Overridable Function GetGlyphImages() As ImageCollection
+            Dim skinElement As SkinElement = GetSkinElement()
+            If skinElement Is Nothing Then Return Nothing
+
+            If skinElement.Glyph Is Nothing Then
+                skipGlyph = True
                 Return Nothing
             End If
-            Return skinElement.Image.GetImages()
+
+            Return skinElement.Glyph.GetImages()
+        End Function
+
+        Private Shared Function GetSkinElement() As SkinElement
+            Dim skin As Skin = EditorsSkins.GetSkin(DevExpress.LookAndFeel.UserLookAndFeel.[Default])
+            Dim skinElement As SkinElement = skin("CheckBox")
+            Return skinElement
         End Function
 
         Private Sub DefaultDrawColumnHeader(ByVal e As ColumnHeaderCustomDrawEventArgs)

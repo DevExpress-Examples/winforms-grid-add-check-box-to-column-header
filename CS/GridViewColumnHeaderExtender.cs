@@ -19,8 +19,8 @@ namespace DXSample
         readonly Size checkBoxSize;
         public bool DrawCheckBoxByDefault { get; set; }
         bool inHeader = false;
-        bool isCheckBoxCollectionInitialized = false;
         ImageCollection checkBoxCollection = null;
+        ImageCollection glyphCollection = null;
         GridColumn column = null;
 
         public GridViewColumnHeaderExtender()
@@ -119,18 +119,20 @@ namespace DXSample
         }
 
         private Rectangle CalcCheckBoxRectangle(GridColumn col)
-        {            
+        {
             GraphicsInfo.Default.AddGraphics(null);
             GridViewInfo viewInfo = view.GetViewInfo() as GridViewInfo;
             GridColumnInfoArgs columnArgs = viewInfo.ColumnsInfo[col];
             Rectangle rect;
-            try {
+            try
+            {
                 rect = GetCheckBoxRectangle(columnArgs, GraphicsInfo.Default.Graphics);
             }
-            finally {
+            finally
+            {
                 GraphicsInfo.Default.ReleaseGraphics();
-            }           
-            
+            }
+
             return rect;
         }
 
@@ -146,7 +148,7 @@ namespace DXSample
         private int CalcInnerElementsMinWidth(GridColumnInfoArgs columnArgs, Graphics gr)
         {
             bool canDrawMode = true;
-            return columnArgs.InnerElements.CalcMinSize(gr, ref canDrawMode).Width;
+            return columnArgs.InnerElements.CalcMinSize(gr, ref canDrawMode).Width + 5;
         }
 
         void OnCustomDrawColumnHeader(object sender, ColumnHeaderCustomDrawEventArgs e)
@@ -190,27 +192,55 @@ namespace DXSample
                     break;
             }
             Rectangle rect = CalcCheckBoxRectangle(e.Column);
-            CheckCheckBoxCollection();
+            CheckImageCollections();
+            CheckGlyphCollection();
             e.Cache.DrawImage(checkBoxCollection.Images[index], rect);
+            if (!skipGlyph)
+                e.Cache.DrawImage(glyphCollection.Images[index], rect);
         }
 
-        private void CheckCheckBoxCollection()
+        private void CheckImageCollections()
         {
-            if (isCheckBoxCollectionInitialized)
-                return;
-            checkBoxCollection = GetCheckBoxImages();
-            isCheckBoxCollectionInitialized = true;
+            if (checkBoxCollection == null)
+                checkBoxCollection = GetCheckBoxImages();
+        }
+
+        private void CheckGlyphCollection()
+        {
+            if (!skipGlyph && glyphCollection == null)
+                glyphCollection = GetGlyphImages();
+
         }
 
         protected virtual ImageCollection GetCheckBoxImages()
         {
-            Skin skin = EditorsSkins.GetSkin(DevExpress.LookAndFeel.UserLookAndFeel.Default);
-            SkinElement skinElement = skin["CheckBox"];
+            SkinElement skinElement = GetSkinElement();
             if (skinElement == null)
                 return null;
+
             return skinElement.Image.GetImages();
         }
 
+        bool skipGlyph = false;
+        protected virtual ImageCollection GetGlyphImages()
+        {
+            SkinElement skinElement = GetSkinElement();
+            if (skinElement == null)
+                return null;
+            if (skinElement.Glyph == null)
+            {
+                skipGlyph = true;
+                return null;
+            }
+            return skinElement.Glyph.GetImages();
+        }
+
+        private static SkinElement GetSkinElement()
+        {
+            Skin skin = EditorsSkins.GetSkin(DevExpress.LookAndFeel.UserLookAndFeel.Default);
+            SkinElement skinElement = skin["CheckBox"];
+            return skinElement;
+        }
         private void DefaultDrawColumnHeader(ColumnHeaderCustomDrawEventArgs e)
         {
             e.Painter.DrawObject(e.Info);
@@ -238,10 +268,7 @@ namespace DXSample
 
         protected override void Dispose(bool disposing)
         {
-            if(disposing) {
-                ViewEvents(false);
-                View = null;
-            }
+            ViewEvents(false);
             base.Dispose(disposing);
         }
 
@@ -252,6 +279,5 @@ namespace DXSample
             if (handler != null)
                 handler(view, ea);
         }
-
     }
 }
