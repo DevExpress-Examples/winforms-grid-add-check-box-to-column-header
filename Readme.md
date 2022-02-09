@@ -14,7 +14,7 @@ Set the `GridViewColumnHeaderExtender.DrawCheckBoxByDefault` option to `false` t
 
 <img src="https://raw.githubusercontent.com/DevExpress-Examples/gridcontrol-how-to-add-a-check-box-to-a-column-header-t325446/17.2.3+/media/5556cf9f-acb4-11e5-80bf-00155d62480c.png">
 
-You can handle the `GridViewColumnHeaderExtender.ColumnCheckedChanged` event to respond to changes in a column's check state.
+The example handles the `GridViewColumnHeaderExtender.ColumnCheckedChanged` event to respond to changes in a column's check state.
 
 <!-- default file list -->
 ## Files to Look At
