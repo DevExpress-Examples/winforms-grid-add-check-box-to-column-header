@@ -21,10 +21,11 @@ The example handles the `GridViewColumnHeaderExtender.ColumnCheckedChanged` eve
 
 * [ColumnCheckedChangedEventArgs.cs](./CS/ColumnCheckedChangedEventArgs.cs) (VB: [ColumnCheckedChangedEventArgs.vb](./VB/ColumnCheckedChangedEventArgs.vb))
 * [ColumnStateRepository.cs](./CS/ColumnStateRepository.cs) (VB: [ColumnStateRepository.vb](./VB/ColumnStateRepository.vb))
-* [DataHelper.cs](./CS/DataHelper.cs) (VB: [DataHelper.vb](./VB/DataHelper.vb))
 * [GridViewColumnHeaderExtender.cs](./CS/GridViewColumnHeaderExtender.cs) (VB: [GridViewColumnHeaderExtender.vb](./VB/GridViewColumnHeaderExtender.vb))
 * [Main.cs](./CS/Main.cs) (VB: [Main.vb](./VB/Main.vb))
 <!-- default file list end -->
 
 ## See Also
 - [How to display a custom button in a grid column header](https://www.devexpress.com/Support/Center/p/E2793)
+- [Custom Draw Templates](https://docs.devexpress.com/WindowsForms/404153/common-features/html-css-based-desktop-ui/custom-draw-with-html-templates)
+- [HTML and CSS Support](https://docs.devexpress.com/WindowsForms/403397/common-features/html-css-based-desktop-ui)
