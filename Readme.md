@@ -9,11 +9,11 @@
 
 This example creates a `GridViewColumnHeaderExtender` component that displays check boxes in column headers of a [Grid View](https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView).
 
-<img src="https://raw.githubusercontent.com/DevExpress-Examples/gridcontrol-how-to-add-a-check-box-to-a-column-header-t325446/17.2.3+/media/af2b4a40-acaf-11e5-80bf-00155d62480c.png">
+![WinForms Data Grid - Display a check box in a column header](media/grid-checkbox-in-column-header-show-always.gif)
 
 Set the `GridViewColumnHeaderExtender.DrawCheckBoxByDefault` option to `false` to display check boxes when the mouse cursor hovers over column headers:
 
-<img src="https://raw.githubusercontent.com/DevExpress-Examples/gridcontrol-how-to-add-a-check-box-to-a-column-header-t325446/17.2.3+/media/5556cf9f-acb4-11e5-80bf-00155d62480c.png">
+![WinForms Data Grid - Display a check box in a column header on hover](media/grid-checkbox-in-column-header-show-on-hover.gif)
 
 The example handles the `GridViewColumnHeaderExtender.ColumnCheckedChanged` event to respond to changes in a column's check state.
 
